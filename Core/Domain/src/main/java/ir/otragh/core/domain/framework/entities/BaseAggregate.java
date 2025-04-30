@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Getter
 public abstract class BaseAggregate<ID extends Number> {
-    private ID id;
+    protected ID id;
     private List<DomainEvent> events = new LinkedList<>();
 
     public BaseAggregate(ID id) {

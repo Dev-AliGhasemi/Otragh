@@ -1,5 +1,6 @@
 package ir.otragh.core.domain.homes.entities;
 
+import ir.otragh.core.domain.framework.Result;
 import ir.otragh.core.domain.framework.entities.BaseEntity;
 import ir.otragh.core.domain.homes.events.HomeCreated;
 import ir.otragh.core.domain.homes.events.HomeReserved;

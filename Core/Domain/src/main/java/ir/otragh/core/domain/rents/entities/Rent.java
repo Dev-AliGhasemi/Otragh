@@ -1,19 +1,15 @@
 package ir.otragh.core.domain.rents.entities;
 
-import ir.otragh.core.domain.comments.entities.Comment;
+import ir.otragh.core.domain.framework.Result;
 import ir.otragh.core.domain.framework.entities.BaseAggregate;
 import ir.otragh.core.domain.homes.entities.Home;
 import ir.otragh.core.domain.rents.domainservices.PricingService;
-import ir.otragh.core.domain.rents.events.CommentSubmitted;
-import ir.otragh.core.domain.rents.events.Payed;
+import ir.otragh.core.domain.rents.events.RentConfirmed;
 import ir.otragh.core.domain.rents.events.RentReserved;
 import ir.otragh.core.domain.rents.valueobjects.DateRange;
 import ir.otragh.core.domain.rents.valueobjects.PricingDetails;
 import ir.otragh.core.domain.shared.valueobjects.Money;
 import lombok.Getter;
-
-import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -50,14 +46,14 @@ public final class Rent extends BaseAggregate<Long> {
         return rent;
     }
 
-//    public void submitComment(Comment comment) {
-//        if (isPayed && Date.valueOf(LocalDate.now()).after(endRent.value())) {
-//            this.comment = comment;
-//            addDomainEvent(new CommentSubmitted(comment.getId()));
-//        } else {
-//
-//        }
-//    }
+    public Result confirm(LocalDateTime utcNow){
+        if (rentStatus != RentStatus.RESERVED)
+            return Result.failure(RentErrors.NOT_RESERVED);
+        rentStatus = RentStatus.CONFIRMED;
+        hostStatusOnUTC = utcNow;
+        addDomainEvent(new RentConfirmed(id));
+        return Result.success();
+    }
 
     public Money totalPrice() {
         return Money.sum(priceForPeriod, amenitiesUpCharge);
