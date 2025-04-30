@@ -13,7 +13,6 @@ import ir.otragh.core.domain.rents.microtypes.StartDate;
 import ir.otragh.core.domain.users.entities.User;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Component
@@ -22,6 +21,7 @@ public class CreateHandler implements CommandHandler<Create, Void> {
     private HomeRepository homeRepository;
     private AmenityRepository amenityRepository;
     private UserRepository userRepository;
+    private EmailService emailService;
 
     @Override
     public Void handle(Create command) {
@@ -30,9 +30,10 @@ public class CreateHandler implements CommandHandler<Create, Void> {
         List<Amenity> amenities = amenityRepository.findAllById(command.selectedAmenities());
         if (user != null)
             if (home != null)
-                if (amenities.size() == command.selectedAmenities().size())
-                    Rent.reserve(0, home, user, new StartDate(command.startRent()) , new EndDate(command.endRent()),
-                            new LinkedList<>(amenities));
+                if (amenities.size() == command.selectedAmenities().size()){
+                    Rent.reserve(0, home, user, new StartDate(command.startRent()) , new EndDate(command.endRent()));
+                    emailService.sendEmail("Test");
+                }
         return null;
     }
 }
