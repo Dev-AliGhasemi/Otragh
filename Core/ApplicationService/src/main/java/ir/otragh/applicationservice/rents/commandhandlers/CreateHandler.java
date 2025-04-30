@@ -31,7 +31,7 @@ public class CreateHandler implements CommandHandler<Create, Void> {
         if (user != null)
             if (home != null)
                 if (amenities.size() == command.selectedAmenities().size())
-                    Rent.create(0, home, user, new StartDate(command.startRent()) , new EndDate(command.endRent()),
+                    Rent.reserve(0, home, user, new StartDate(command.startRent()) , new EndDate(command.endRent()),
                             new LinkedList<>(amenities));
         return null;
     }

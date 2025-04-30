@@ -1,8 +1,8 @@
 package ir.otragh.core.domain.shared.valueobjects;
 
-public record Money(int amount) {
+public record Money(long amount) {
 
-    public static int zero = 0;
+    public static long zero = 0;
 
     public Money{
         if (amount < 0)
