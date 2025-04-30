@@ -1,0 +1,67 @@
+package ir.otragh.core.domain.rents.entities;
+
+import ir.otragh.core.domain.comments.entities.Comment;
+import ir.otragh.core.domain.framework.entities.BaseAggregate;
+import ir.otragh.core.domain.homes.entities.Home;
+import ir.otragh.core.domain.rents.domainservices.PricingService;
+import ir.otragh.core.domain.rents.events.CommentSubmitted;
+import ir.otragh.core.domain.rents.events.Payed;
+import ir.otragh.core.domain.rents.events.RentReserved;
+import ir.otragh.core.domain.rents.valueobjects.DateRange;
+import ir.otragh.core.domain.rents.valueobjects.PricingDetails;
+import ir.otragh.core.domain.shared.valueobjects.Money;
+import lombok.Getter;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Getter
+public final class Rent extends BaseAggregate<Long> {
+
+    private int homeId;
+    private int userId;
+    private Money priceForPeriod;
+    private Money amenitiesUpCharge;
+    private RentStatus rentStatus;
+    private DateRange duration;
+    private LocalDateTime createdOnUTC;
+    private LocalDateTime hostStatusOnUTC;
+    private LocalDateTime guestStatusOnUTC;
+
+    public Rent(Long id, int homeId, int userId, DateRange duration, Money priceForPeriod, Money amenitiesUpCharge, RentStatus rentStatus,
+                LocalDateTime createdOnUTC) {
+        super(id);
+        this.homeId = homeId;
+        this.userId = userId;
+        this.duration = duration;
+        this.priceForPeriod = priceForPeriod;
+        this.amenitiesUpCharge = amenitiesUpCharge;
+        this.rentStatus = rentStatus;
+        this.createdOnUTC = createdOnUTC;
+    }
+
+    public static Rent reserve(long id, Home home, int userId, DateRange duration, PricingService pricingService, LocalDateTime utcNow) {
+        PricingDetails pricingDetails = pricingService.calculatePrice(home,duration);
+        Rent rent = new Rent(id, home.getId(), userId, duration,pricingDetails.priceForPeriod(),pricingDetails.amenitiesUpCharge(),
+                RentStatus.RESERVED, utcNow);
+        rent.addDomainEvent(new RentReserved(id));
+        home.reserve(utcNow);
+        return rent;
+    }
+
+//    public void submitComment(Comment comment) {
+//        if (isPayed && Date.valueOf(LocalDate.now()).after(endRent.value())) {
+//            this.comment = comment;
+//            addDomainEvent(new CommentSubmitted(comment.getId()));
+//        } else {
+//
+//        }
+//    }
+
+    public Money totalPrice() {
+        return Money.sum(priceForPeriod, amenitiesUpCharge);
+    }
+
+
+}
