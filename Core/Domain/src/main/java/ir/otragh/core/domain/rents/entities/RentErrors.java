@@ -8,4 +8,5 @@ public class RentErrors {
     public static final Error NOT_CONFIRMED = new Error("Booking.NotConfirmed", "Booking not confirmed");
     public static final Error NOT_FINISHED = new Error("Booking.NotFinished", "Booking not finished");
     public static final Error ALREADY_STARTED = new Error("Booking.AlreadyStarted", "Booking already started");
+    public static final Error OVERLAP = new Error("Booking.Overlap", "Booking overlap");
 }

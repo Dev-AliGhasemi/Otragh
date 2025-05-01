@@ -9,13 +9,8 @@ import ir.otragh.core.domain.shared.valueobjects.Money;
 import java.util.List;
 
 public class PricingService {
-    private List<Amenity> amenities;
 
-    public PricingService(List<Amenity> amenities) {
-        this.amenities = amenities;
-    }
-
-    public PricingDetails calculatePrice(Home home, DateRange duration){
+    public static PricingDetails calculatePrice(List<Amenity> amenities, Home home, DateRange duration){
 
         Money priceForPeriod = new Money(home.getPrice().amount() * duration.lengthInDays());
 

@@ -6,10 +6,9 @@ import lombok.Getter;
 @Getter
 public class Result {
     private boolean isSuccess;
-    private boolean isFailure;
     private Error error;
 
-    Result(boolean isSuccess, Error error) {
+    protected Result(boolean isSuccess, Error error) {
         if (isSuccess && error == Error.NONE)
             throw new IllegalStateException();
         if (!isSuccess && error == Error.NONE)
@@ -26,20 +25,8 @@ public class Result {
         return new Result(false,error);
     }
 
-    public static<T> DataResult<T> success(T data){
-        return new DataResult<T>(data,true,Error.NONE);
+    public static<T> ir.otragh.core.domain.framework.data.Result<T> success(T data){
+        return new ir.otragh.core.domain.framework.data.Result<T>(data,true,Error.NONE);
     }
-
-    @Getter
-    public static class DataResult<T> extends Result{
-        private T data;
-
-        private DataResult(T data,boolean isSuccess, Error error) {
-            super(isSuccess,error);
-            this.data = data;
-        }
-    }
-
-
 }
 
