@@ -12,10 +12,13 @@ import ir.otragh.core.domain.framework.Result;
 import ir.otragh.core.domain.homes.errors.HomeError;
 import ir.otragh.core.domain.rents.entities.Rent;
 import ir.otragh.core.domain.rents.entities.RentErrors;
+import ir.otragh.applicationservice.rents.events.reserved.RentReserved;
 import ir.otragh.core.domain.rents.valueobjects.DateRange;
 import ir.otragh.core.domain.users.errors.UserError;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.context.event.EventListener;
@@ -24,6 +27,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Validated
+@Component("ReserveCommandHandler")
 public class ReserveCommandHandler implements CommandHandler<ReserveCommand, Result> {
 
     private IdGenerator idGenerator;
@@ -32,10 +36,10 @@ public class ReserveCommandHandler implements CommandHandler<ReserveCommand, Res
     private RentRepository rentRepository;
     private AmenityRepository amenityRepository;
     private DateTimePicker dateTimePicker;
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional
-    @EventListener
     public Result handle(@Valid ReserveCommand command) {
         var user = userRepository.findUserById(command.userId());
         if (user == null)
@@ -46,13 +50,15 @@ public class ReserveCommandHandler implements CommandHandler<ReserveCommand, Res
 
         DateRange duration = new DateRange(command.startDate(), command.endDate());
 
-        if (rentRepository.isOverlapping(home,duration))
+        if (homeRepository.existsByIdAnAndLastReservedOnUTCBetween(home.getId(),duration.start(),duration.end()))
             return Result.failure(RentErrors.OVERLAP);
 
         List<Amenity> amenities = amenityRepository.findAllById(home.getAmenities());
 
         var rent = Rent.reserve(idGenerator.generateId(), home, user.getId(), duration, dateTimePicker.getUTCNow(), amenities);
+
         rentRepository.save(rent);
+        applicationEventPublisher.publishEvent(new RentReserved(rent.getId()));
         return Result.success(rent.getId());
     }
 }

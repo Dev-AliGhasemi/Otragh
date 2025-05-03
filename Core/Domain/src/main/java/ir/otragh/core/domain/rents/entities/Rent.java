@@ -18,8 +18,8 @@ import java.util.List;
 @Getter
 public final class Rent extends BaseAggregate<Long> {
 
-    private int homeId;
-    private int userId;
+    private long homeId;
+    private long userId;
     private Money priceForPeriod;
     private Money amenitiesUpCharge;
     private RentStatus rentStatus;
@@ -28,7 +28,7 @@ public final class Rent extends BaseAggregate<Long> {
     private LocalDateTime hostStatusOnUTC;
     private LocalDateTime guestStatusOnUTC;
 
-    public Rent(Long id, int homeId, int userId, DateRange duration, Money priceForPeriod, Money amenitiesUpCharge, RentStatus rentStatus,
+    public Rent(Long id, long homeId, long userId, DateRange duration, Money priceForPeriod, Money amenitiesUpCharge, RentStatus rentStatus,
                 LocalDateTime createdOnUTC) {
         super(id);
         this.homeId = homeId;
@@ -44,7 +44,6 @@ public final class Rent extends BaseAggregate<Long> {
         PricingDetails pricingDetails = PricingService.calculatePrice(amenities,home,duration);
         Rent rent = new Rent(id, home.getId(), userId, duration,pricingDetails.priceForPeriod(),pricingDetails.amenitiesUpCharge(),
                 RentStatus.RESERVED, utcNow);
-        rent.addDomainEvent(new RentReserved(id));
         home.reserve(utcNow);
         return rent;
     }
@@ -61,6 +60,7 @@ public final class Rent extends BaseAggregate<Long> {
     public Result reject(LocalDateTime utcNow){
         if (rentStatus != RentStatus.RESERVED)
             return Result.failure(RentErrors.NOT_RESERVED);
+
         rentStatus = RentStatus.REJECTED;
         hostStatusOnUTC = utcNow;
         addDomainEvent(new RentRejected(id));

@@ -1,4 +1,4 @@
-package ir.otragh.core.domain.rents.events;
+package ir.otragh.applicationservice.rents.events;
 
 import ir.otragh.core.domain.framework.events.DomainEvent;
 

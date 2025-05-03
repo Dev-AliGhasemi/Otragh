@@ -8,8 +8,14 @@
         <artifactId>Otragh</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
-    <artifactId>Infrastructure</artifactId>
+    <packaging>pom</packaging>
+    <artifactId>Infrastructure</artifactId>'
+    <modules>
+        <module>SimpleDateTime</module>
+        <module>SimpleEmail</module>
+        <module>Snowflake</module>
+        <module>DALCommand</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
