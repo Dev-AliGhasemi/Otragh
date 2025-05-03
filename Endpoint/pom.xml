@@ -10,6 +10,10 @@
     </parent>
 
     <artifactId>Endpoint</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>RestAPI</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

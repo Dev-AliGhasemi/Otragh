@@ -9,8 +9,15 @@
     <file url="file://$PROJECT_DIR$/Core/DomainService/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Endpoint/RestAPI/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Endpoint/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Endpoint/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Infrastructure/DALCommand/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Infrastructure/SimpleDateTime/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Infrastructure/SimpleEmail/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Infrastructure/Snowflake/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Infrastructure/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Infrastructure/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>
